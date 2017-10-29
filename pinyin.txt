@@ -1,0 +1,28 @@
+## 把需要练习的拼音在下方输入，一行一个，以回车分隔
+## a,g,v 在读取时会自动转换成 ɑ,ɡ,ü
+bang
+ming
+yin
+yue
+yun
+yue
+bai
+bei
+pa
+zha
+zhuan
+zhuang
+za
+zuo
+cuo
+cong
+cui
+liu
+lv
+lu
+qu
+quan
+tuan
+xuan
+xu
+xiong
