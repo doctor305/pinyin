@@ -12,9 +12,18 @@ list_pinyin_all = ['ɑ','o','e','i','u','ü','b','p','m','f','d','t','n','l','ɡ
 list_pinyin_shengmu = ['b','p','m','f','d','t','n','l','ɡ','k','h','j','q','x','zh','ch','sh','r','z','c','s','y','w']
 list_pinyin_yunmu = ['ɑ','o','e','i','u','ü','ɑi','ei','ui','ɑo','ou','iu','ie','üe','er','ɑn','en','in','un','ün','ɑnɡ','enɡ','inɡ','onɡ']
 list_error = []
+list_pinyin_txt = []
 number = 0
 letter_temp = ''
 
+def read_txt():
+    with open('pinyin.txt','r') as f:
+        for line in f.read():
+            if line[0] != '#' and len(line) != 0:
+                print line
+                list_pinyin_txt.append(line)
+        
+        
 def display_letter(ls):
     letter = random.choice(ls)
     canvas.delete('text')
@@ -49,7 +58,8 @@ def display():
         canvas.create_text(590,570,text=msg2,font='ComicSansMS -50 bold',\
                        fill='red',tags='text')
 
-
+read_txt()
+print list_pinyin_txt
 windows = Tk()
 windows.maxsize(1200,700)
 windows.minsize(1200,700)
