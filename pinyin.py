@@ -33,33 +33,53 @@ def display_letter(ls):
 def yes():
     global number
     global letter_temp
+    if letter_temp != '':
+        number += 1
     letter_temp = display_letter(list_pinyin_all)
-    number += 1
+    
 
 def no():
     global number
     global letter_temp
-    list_error.append(letter_temp)
+    if letter_temp != '':
+        list_error.append(letter_temp)
+        number += 1
     letter_temp = display_letter(list_pinyin_all)
-    number += 1
+    
     
 
 def display():
     global number
+    global list_error
+    global letter_temp
     canvas.delete('text')
     n = len(list_error)
     msg = '答题 %s 道，错误 %s 道' % (number,n)
     canvas.create_text(590,300,text=msg,font='ComicSansMS -100 bold',\
                        fill='blue',tags='text')
-    if n <= 10:
+    if n <= 10 and n > 1:
         msg2 = ' ，'.join(list_error)
         canvas.create_text(590,500,text='此次出错的音节有： ',font='ComicSansMS -50 bold',\
-                       fill='blue',tags='text')
+                           fill='blue',tags='text')
         canvas.create_text(590,570,text=msg2,font='ComicSansMS -50 bold',\
-                       fill='red',tags='text')
+                           fill='red',tags='text')
+    elif n == 0:
+        canvas.create_text(590,500,text='很棒！这次全对了！ ',font='ComicSansMS -50 bold',\
+                           fill='blue',tags='text')
+    elif n == 1:
+        canvas.create_text(590,500,text='此次出错的音节有： ',font='ComicSansMS -50 bold',\
+                           fill='blue',tags='text')
+        canvas.create_text(590,570,text=list_error[0],font='ComicSansMS -50 bold',\
+                           fill='red',tags='text')
+    else:
+        canvas.create_text(590,500,text='错误太多了，还需努力！ ',font='ComicSansMS -50 bold',\
+                           fill='blue',tags='text')
+    list_error = []
+    number = 0
+    letter_temp = ''
 
-read_txt()
-print list_pinyin_txt
+#read_txt()
+#print list_pinyin_txt
 windows = Tk()
 windows.maxsize(1200,700)
 windows.minsize(1200,700)
@@ -72,7 +92,7 @@ frame2 = Frame(windows,borderwidth=5)
 canvas = Canvas(frame1,bg='green',width=1180,height=600)
 button1 = Button(frame2,height=10,width=10,text='正确',command=yes)
 button2 = Button(frame2,height=10,width=10,text='错误',command=no)
-button3 = Button(frame2,height=10,width=20,text='查看成绩',command=display)
+button3 = Button(frame2,height=10,width=20,text='结束-显示成绩',command=display)
 
 
 frame1.pack()
