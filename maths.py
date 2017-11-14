@@ -9,7 +9,17 @@ import random
 import time
 
 number = 0
+list_number = []
 
+class ClickNumber():
+    def __init__(self,x1,y1,x2,y2,number):
+        self.x1 = x1
+        self.x2 = x2
+        self.y1 = y1
+        self.y2 = y2
+        self.number = number
+
+    
 def display_letter(ls):
     letter = random.choice(ls)
     canvas.delete('text')
@@ -24,13 +34,25 @@ def click(event):
     x = event.x
     y = event.y
     print x,y
+    print click_number(x,y)
+
+def click_number(x,y):
+    for xy in list_number:
+        if x<xy.x2 and x > xy.x1 and y < xy.y2 and y > xy.y1:
+            canvas.create_rectangle(xy.x1,xy.y1,xy.x2,xy.y2,fill='red',tags='text')
+            return xy.number
 
 def init(maxnum):
     if maxnum == 10:
         num_width = 110
-        canvas.create_line(40,600-40-num_width,1180-40,600-40-num_width,fill='black',width=2)
-        for n in range(maxnum+1):
-            canvas.create_line(40+n*num_width,600-40-num_width,40+n*num_width,600-40,fill='black',width=2)
+        canvas.create_line(40,600-40-num_width,1180-40,600-40-num_width,fill='black',width=2,tags='init')
+        canvas.create_line(40,600-40,1180-40,600-40,fill='black',width=2,tags='init')
+        for n in range(maxnum):
+            canvas.create_line(40+n*num_width,600-40-num_width,40+n*num_width,600-40,fill='black',width=2,tags='init')
+            canvas.create_text(40+(n+0.5)*num_width,600-40-num_width*0.5,text = n+1,font='ComicSansMS -40 bold',fill='black',tags='init')
+            list_number.append(ClickNumber(40+n*num_width,600-40-num_width,40+(n+1)*num_width,600-40,n+1))
+            
+        canvas.create_line(40+10*num_width,600-40-num_width,40+10*num_width,600-40,fill='black',width=2,tags='init')
         
 
 
