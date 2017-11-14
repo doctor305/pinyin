@@ -10,7 +10,7 @@ import time
 
 number = 0
 list_number = []
-list_ques = []
+list_ques = ['','','','']
 
 class ClickNumber():
     def __init__(self,x1,y1,x2,y2,number):
@@ -28,13 +28,24 @@ def get_ques(maxnum):
         list_ques[1] = random.randint(0,maxnum)
         list_ques[2] = random.randint(0,maxnum-list_ques[1])
         list_ques[3] = list_ques[1]+list_ques[2]
-        n = random.choice([1,2,3])
-        result = list_ques[n]
-        list_ques[n] = '□'
-        return str(list_ques[1])+str(list_ques[0])+str(list_ques[2])+'='+str(list_ques[3]),result
+    elif list_ques[0] == '-':
+        list_ques[1] = random.randint(1,maxnum)
+        list_ques[2] = random.randint(0,list_ques[1])
+        list_ques[3] = list_ques[1]-list_ques[2]
+    n = random.choice([1,2,3])
+    result = list_ques[n]
+    list_ques[n] = '□'
+    return str(list_ques[1])+str(list_ques[0])+str(list_ques[2])+'='+str(list_ques[3]),result
+
+def start():
+    canvas.delete('text')
+    canvas.bind('<Button-1>',click)
+    string,result = get_ques(10)
+    canvas.create_text(590,200,text=string,font='ComicSansMS -270 bold',fill='blue',tags='text')
 
 def display():
-    canvas.create_text(590,500,text='此次出错的音节有： ',font='ComicSansMS -50 bold',fill='blue',tags='text')
+    start()
+    #    canvas.create_text(590,500,text='此次出错的音节有： ',font='ComicSansMS -50 bold',fill='blue',tags='text')
 
 def click(event):
     x = event.x
@@ -73,7 +84,7 @@ frame2 = Frame(windows,borderwidth=5)
 canvas = Canvas(frame1,bg='green',width=1180,height=600)
 button1 = Button(frame2,height=10,width=20,text='开始',command=display)
 button2 = Button(frame2,height=10,width=20,text='结束-显示成绩',command=display)
-canvas.bind('<Button-1>',click)
+
 
 frame1.pack()
 frame2.pack()
