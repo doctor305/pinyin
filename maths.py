@@ -10,6 +10,7 @@ import time
 
 number = 0
 list_number = []
+list_ques = []
 
 class ClickNumber():
     def __init__(self,x1,y1,x2,y2,number):
@@ -20,15 +21,20 @@ class ClickNumber():
         self.number = number
 
     
-def display_letter(ls):
-    letter = random.choice(ls)
-    canvas.delete('text')
-    canvas.create_text(590,300,text=letter,font='ComicSansMS -500 bold',fill='blue',tags='text')
-    return letter
+def get_ques(maxnum):
+    global list_ques
+    list_ques[0] = random.choice(['+','-'])
+    if list_ques[0] == '+':
+        list_ques[1] = random.randint(0,maxnum)
+        list_ques[2] = random.randint(0,maxnum-list_ques[1])
+        list_ques[3] = list_ques[1]+list_ques[2]
+        n = random.choice([1,2,3])
+        result = list_ques[n]
+        list_ques[n] = '□'
+        return str(list_ques[1])+str(list_ques[0])+str(list_ques[2])+'='+str(list_ques[3]),result
 
 def display():
-    canvas.create_text(590,500,text='此次出错的音节有： ',font='ComicSansMS -50 bold',\
-                       fill='blue',tags='text')
+    canvas.create_text(590,500,text='此次出错的音节有： ',font='ComicSansMS -50 bold',fill='blue',tags='text')
 
 def click(event):
     x = event.x
@@ -38,7 +44,7 @@ def click(event):
 
 def click_number(x,y):
     for xy in list_number:
-        if x<xy.x2 and x > xy.x1 and y < xy.y2 and y > xy.y1:
+        if x < xy.x2 and x > xy.x1 and y < xy.y2 and y > xy.y1:
             canvas.create_rectangle(xy.x1,xy.y1,xy.x2,xy.y2,fill='red',tags='text')
             return xy.number
 
