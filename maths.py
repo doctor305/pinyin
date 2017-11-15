@@ -11,6 +11,7 @@ import time
 number = 0
 list_number = []
 list_ques = ['','','','']
+list_result = ['']
 
 class ClickNumber():
     def __init__(self,x1,y1,x2,y2,number):
@@ -38,9 +39,10 @@ def get_ques(maxnum):
     return str(list_ques[1])+str(list_ques[0])+str(list_ques[2])+'='+str(list_ques[3]),result
 
 def start():
+    global list_result
     canvas.delete('text')
+    string,list_result[0] = get_ques(10)
     canvas.bind('<Button-1>',click)
-    string,result = get_ques(10)
     canvas.create_text(590,200,text=string,font='ComicSansMS -270 bold',fill='blue',tags='text')
 
 def display():
@@ -50,14 +52,18 @@ def display():
 def click(event):
     x = event.x
     y = event.y
-    print x,y
-    print click_number(x,y)
-
-def click_number(x,y):
     for xy in list_number:
         if x < xy.x2 and x > xy.x1 and y < xy.y2 and y > xy.y1:
+            canvas.unbind('<Button-1>')
             canvas.create_rectangle(xy.x1,xy.y1,xy.x2,xy.y2,fill='red',tags='text')
-            return xy.number
+            if xy.number == list_result[0]:
+                canvas.create_text(700,400,text='正确',font='ComicSansMS -40 bold',fill='red',tags='text')
+            else:
+                canvas.create_text(700,400,text='错误，正确答案应为'+str(list_result[0]),font='ComicSansMS -40 bold',fill='red',tags='text')
+            print xy.number,list_result[0]
+            time.sleep(1)
+ #           start()
+    
 
 def init(maxnum):
     if maxnum == 10:
