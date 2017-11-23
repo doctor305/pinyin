@@ -41,25 +41,20 @@ def get_ques(maxnum):
 
 def start():
     global list_result
-    global click_tag
     canvas.delete('text')
     string,list_result[0] = get_ques(10)
     canvas.bind('<Button-1>',click)
     canvas.create_text(590,200,text=string,font='ComicSansMS -270 bold',fill='blue',tags='text')
-
 
 def display():
     pass
     #    canvas.create_text(590,500,text='此次出错的音节有： ',font='ComicSansMS -50 bold',fill='blue',tags='text')
 
 def click(event):
-    global list_result
-    global click_tag
     x = event.x
     y = event.y
     for xy in list_number:
         if x < xy.x2 and x > xy.x1 and y < xy.y2 and y > xy.y1:
-            click_tag = True
             canvas.unbind('<Button-1>')
             canvas.create_rectangle(xy.x1,xy.y1,xy.x2,xy.y2,fill='red',tags='text')
             if xy.number == list_result[0]:
@@ -67,9 +62,6 @@ def click(event):
             else:
                 canvas.create_text(700,400,text='错误，正确答案应为'+str(list_result[0]),font='ComicSansMS -40 bold',fill='red',tags='text')
             print xy.number,list_result[0]
-##            time.sleep(1)
-            break
-
     
 
 def init(maxnum):
