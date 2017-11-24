@@ -7,6 +7,7 @@ from Tkinter import *
 import os
 import random
 import time
+import codecs
 
 number = 0
 list_number = []
@@ -90,21 +91,32 @@ windows.maxsize(1200,700)
 windows.minsize(1200,700)
 windows.title("一年级数学练习  Version 1.0.3 ")
 
-frame1 = Frame(windows,relief=GROOVE,borderwidth=10)
-frame2 = Frame(windows,borderwidth=5)
+#frame1 = Frame(windows,relief=GROOVE,borderwidth=10)
+#frame2 = Frame(windows,borderwidth=5)
 
-canvas = Canvas(frame1,bg='green',width=1180,height=600)
-button1 = Button(frame2,height=10,width=20,text='开始',command=start)
-button2 = Button(frame2,height=10,width=20,text='结束-显示成绩',command=display)
+canvas = Canvas(windows,bg='green',width=1180,height=600)
+model_list = StringVar()
+model_list.set(1)
+#model = OptionMenu(frame2,model_list,'10以内加减法','20以内不进位','20以内进位 ')
+button1 = Button(windows,height=10,width=20,font='ComicSansMS -20 bold',text='开始',command=start)
+button2 = Button(windows,height=10,width=20,font='ComicSansMS -20 bold',text='结束-显示成绩',command=display)
+R1 = Radiobutton(windows,indicatoron = False ,text="Option 1", variable=model_list, value=1)  
+R2 = Radiobutton(windows,indicatoron = False ,text="Option 2", variable=model_list, value=2)  
+R3 = Radiobutton(windows,indicatoron = False ,text="Option 3", variable=model_list, value=3)  
+ 
 
+#frame1.pack()
+#frame2.pack()
 
-frame1.pack()
-frame2.pack()
+canvas.grid(row=0, column=0)
 
-canvas.pack()
+#model.pack(side=LEFT)
+R1.grid(row=1, column=1)
+R2.grid(row=2, column=1)
+R3.grid(row=3, column=1)
+button1.grid(row=1, column=2)
+button2.grid(row=1, column=3)
 
-button1.pack(side=LEFT)
-button2.pack(side=RIGHT)
 
 init(10)
 
