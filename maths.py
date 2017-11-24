@@ -10,9 +10,8 @@ import time
 
 number = 0
 list_number = []
-list_ques = ['','','','']
-list_result = ['']
-click_tag = True
+list_question = ['','','','']
+list_result = [-1]
 
 class ClickNumber():
     def __init__(self,x1,y1,x2,y2,number):
@@ -23,31 +22,38 @@ class ClickNumber():
         self.number = number
 
     
-def get_ques(maxnum):
-    global list_ques
-    list_ques[0] = random.choice(['+','-'])
-    if list_ques[0] == '+':
-        list_ques[1] = random.randint(0,maxnum)
-        list_ques[2] = random.randint(0,maxnum-list_ques[1])
-        list_ques[3] = list_ques[1]+list_ques[2]
-    elif list_ques[0] == '-':
-        list_ques[1] = random.randint(1,maxnum)
-        list_ques[2] = random.randint(0,list_ques[1])
-        list_ques[3] = list_ques[1]-list_ques[2]
-    n = random.choice([1,2,3])
-    result = list_ques[n]
-    list_ques[n] = '□'
-    return str(list_ques[1])+str(list_ques[0])+str(list_ques[2])+'='+str(list_ques[3]),result
-
-def start():
+def get_question(maxnum):
+    global list_question
     global list_result
     canvas.delete('text')
-    string,list_result[0] = get_ques(10)
+    list_question[0] = random.choice(['+','-'])
+    if list_question[0] == '+':
+        list_question[1] = random.randint(0,maxnum)
+        list_question[2] = random.randint(0,maxnum-list_question[1])
+        list_question[3] = list_question[1]+list_question[2]
+    elif list_question[0] == '-':
+        list_question[1] = random.randint(1,maxnum)
+        list_question[2] = random.randint(0,list_question[1])
+        list_question[3] = list_question[1]-list_question[2]
+    n = random.choice([1,2,3])
+    result = list_question[n]
+    list_result[0] = result
+    list_question[n] = '□'
+    string = str(list_question[1])+str(list_question[0])+str(list_question[2])+'='+str(list_question[3])
     canvas.bind('<Button-1>',click)
     canvas.create_text(590,200,text=string,font='ComicSansMS -270 bold',fill='blue',tags='text')
 
+def start():
+    get_question(10)
+    button1.configure(text='下一题',command=nextquestion)
+
+def nextquestion():
+    global list_result
+    get_question(10)
+    
 def display():
-    pass
+    canvas.delete('text')
+    button1.configure(text='开始',command=start)
     #    canvas.create_text(590,500,text='此次出错的音节有： ',font='ComicSansMS -50 bold',fill='blue',tags='text')
 
 def click(event):
@@ -61,7 +67,8 @@ def click(event):
                 canvas.create_text(700,400,text='正确',font='ComicSansMS -40 bold',fill='red',tags='text')
             else:
                 canvas.create_text(700,400,text='错误，正确答案应为'+str(list_result[0]),font='ComicSansMS -40 bold',fill='red',tags='text')
-            print xy.number,list_result[0]
+#            print xy.number,list_result[0]
+            
     
 
 def init(maxnum):
@@ -81,7 +88,7 @@ def init(maxnum):
 windows = Tk()
 windows.maxsize(1200,700)
 windows.minsize(1200,700)
-windows.title("一年级数学练习  Version 1.0.1 ")
+windows.title("一年级数学练习  Version 1.0.3 ")
 
 frame1 = Frame(windows,relief=GROOVE,borderwidth=10)
 frame2 = Frame(windows,borderwidth=5)
