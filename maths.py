@@ -47,6 +47,9 @@ def get_question(maxnum):
 def start():
     get_question(10)
     button1.configure(text='下一题',command=nextquestion)
+    R1.configure(state = 'disabled')
+    R2.configure(state = 'disabled')
+    R3.configure(state = 'disabled')
 
 def nextquestion():
     global list_result
@@ -55,6 +58,9 @@ def nextquestion():
 def display():
     canvas.delete('text')
     button1.configure(text='开始',command=start)
+    R1.configure(state = 'normal')
+    R2.configure(state = 'normal')
+    R3.configure(state = 'normal')
 
 def click(event):
     x = event.x
@@ -70,24 +76,24 @@ def click(event):
 #            print xy.number,list_result[0]
 
 def init(maxnum):
-    if maxnum == 10:
-        num_width = 110
-        canvas.create_line(40,600-40-num_width,1180-40,600-40-num_width,fill='black',width=2,tags='init')
-        canvas.create_line(40,600-40,1180-40,600-40,fill='black',width=2,tags='init')
-        for n in range(maxnum):
-            canvas.create_line(40+n*num_width,600-40-num_width,40+n*num_width,600-40,fill='black',width=2,tags='init')
-            canvas.create_text(40+(n+0.5)*num_width,600-40-num_width*0.5,text = n+1,font='ComicSansMS -40 bold',fill='black',tags='init')
-            list_number.append(ClickNumber(40+n*num_width,600-40-num_width,40+(n+1)*num_width,600-40,n+1))
-            
-        canvas.create_line(40+10*num_width,600-40-num_width,40+10*num_width,600-40,fill='black',width=2,tags='init')
+    num_width = 100
+    canvas.create_line(40,600-40-num_width,1180-40,600-40-num_width,fill='black',width=2,tags='init')
+    canvas.create_line(40,600-40,1180-40,600-40,fill='black',width=2,tags='init')
+    for n in range(maxnum):
+        canvas.create_line(40+n*num_width,600-40-num_width,40+n*num_width,600-40,fill='black',width=2,tags='init')
+        canvas.create_text(40+(n+0.5)*num_width,600-40-num_width*0.5,text = n+1,font='ComicSansMS -40 bold',fill='black',tags='init')
+        list_number.append(ClickNumber(40+n*num_width,600-40-num_width,40+(n+1)*num_width,600-40,n+1))
         
+    canvas.create_line(40+10*num_width,600-40-num_width,40+10*num_width,600-40,fill='black',width=2,tags='init')
+    
 
 windows = Tk()
 windows.maxsize(1200,700)
 windows.minsize(1200,700)
 windows.title("一年级数学练习  Version 1.0.3 ")
 
-canvas = Canvas(windows,bg='green',width=1200,height=600)
+frame = Frame(windows,relief=GROOVE,borderwidth=10)
+canvas = Canvas(frame,bg='green',width=1180,height=580)
 model_list = StringVar()
 model_list.set(1)
 button1 = Button(windows,height=3,width=15,font='ComicSansMS -20 bold',text='开始',command=start)
@@ -96,8 +102,8 @@ R1 = Radiobutton(windows,width=10,indicatoron = False ,text="10以内加减", va
 R2 = Radiobutton(windows,width=10,indicatoron = False ,text="20以内不进位", variable=model_list, value=2)  
 R3 = Radiobutton(windows,width=10,indicatoron = False ,text="20以内进位", variable=model_list, value=3)  
  
+frame.grid(row=0,column=0,columnspan=9,rowspan=6)
 canvas.grid(row=0,column=0,columnspan=9,rowspan=6)
-
 R1.grid(row=6,column=2)
 R2.grid(row=7,column=2)
 R3.grid(row=8,column=2)
