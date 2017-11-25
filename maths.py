@@ -55,7 +55,6 @@ def nextquestion():
 def display():
     canvas.delete('text')
     button1.configure(text='开始',command=start)
-    #    canvas.create_text(590,500,text='此次出错的音节有： ',font='ComicSansMS -50 bold',fill='blue',tags='text')
 
 def click(event):
     x = event.x
@@ -69,8 +68,6 @@ def click(event):
             else:
                 canvas.create_text(700,400,text='错误，正确答案应为'+str(list_result[0]),font='ComicSansMS -40 bold',fill='red',tags='text')
 #            print xy.number,list_result[0]
-            
-    
 
 def init(maxnum):
     if maxnum == 10:
@@ -85,37 +82,27 @@ def init(maxnum):
         canvas.create_line(40+10*num_width,600-40-num_width,40+10*num_width,600-40,fill='black',width=2,tags='init')
         
 
-
 windows = Tk()
 windows.maxsize(1200,700)
 windows.minsize(1200,700)
 windows.title("一年级数学练习  Version 1.0.3 ")
 
-#frame1 = Frame(windows,relief=GROOVE,borderwidth=10)
-#frame2 = Frame(windows,borderwidth=5)
-
-canvas = Canvas(windows,bg='green',width=1180,height=600)
+canvas = Canvas(windows,bg='green',width=1200,height=600)
 model_list = StringVar()
 model_list.set(1)
-#model = OptionMenu(frame2,model_list,'10以内加减法','20以内不进位','20以内进位 ')
-button1 = Button(windows,height=10,width=20,font='ComicSansMS -20 bold',text='开始',command=start)
-button2 = Button(windows,height=10,width=20,font='ComicSansMS -20 bold',text='结束-显示成绩',command=display)
-R1 = Radiobutton(windows,indicatoron = False ,text="Option 1", variable=model_list, value=1)  
-R2 = Radiobutton(windows,indicatoron = False ,text="Option 2", variable=model_list, value=2)  
-R3 = Radiobutton(windows,indicatoron = False ,text="Option 3", variable=model_list, value=3)  
+button1 = Button(windows,height=3,width=15,font='ComicSansMS -20 bold',text='开始',command=start)
+button2 = Button(windows,height=3,width=15,font='ComicSansMS -20 bold',text='结束-显示成绩',command=display)
+R1 = Radiobutton(windows,width=10,indicatoron = False ,text="10以内加减", variable=model_list, value=1)  
+R2 = Radiobutton(windows,width=10,indicatoron = False ,text="20以内不进位", variable=model_list, value=2)  
+R3 = Radiobutton(windows,width=10,indicatoron = False ,text="20以内进位", variable=model_list, value=3)  
  
+canvas.grid(row=0,column=0,columnspan=9,rowspan=6)
 
-#frame1.pack()
-#frame2.pack()
-
-canvas.grid(row=0, column=0)
-
-#model.pack(side=LEFT)
-R1.grid(row=1, column=1)
-R2.grid(row=2, column=1)
-R3.grid(row=3, column=1)
-button1.grid(row=1, column=2)
-button2.grid(row=1, column=3)
+R1.grid(row=6,column=2)
+R2.grid(row=7,column=2)
+R3.grid(row=8,column=2)
+button1.grid(row=6,column=4,rowspan=3)
+button2.grid(row=6,column=6,rowspan=3)
 
 
 init(10)
