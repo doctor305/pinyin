@@ -7,12 +7,16 @@ from Tkinter import *
 import os
 import random
 import time
-import codecs
 
 number = 0
 list_number = []
 list_question = ['','','','']
 list_result = [-1]
+time_start = 0
+time_end = 0
+number_question = 0
+number_error = 0
+tag_start = 0
 
 class ClickNumber():
     def __init__(self,x1,y1,x2,y2,number):
@@ -23,49 +27,88 @@ class ClickNumber():
         self.number = number
 
     
-def get_question(maxnum):
+def get_question():
     global list_question
     global list_result
     global model_list
+    global tag_start
     canvas.delete('text')
     list_question[0] = random.choice(['+','-'])
     if list_question[0] == '+':
-        list_question[1] = random.randint(0,maxnum)
-        list_question[2] = random.randint(0,maxnum-list_question[1])
-        list_question[3] = list_question[1]+list_question[2]
+        if model_list.get()=='1':
+            list_question[1] = random.randint(0,10)
+            list_question[2] = random.randint(0,10-list_question[1])
+            list_question[3] = list_question[1]+list_question[2]
+        elif model_list.get()=='2':
+            list_question[1] = random.randint(10,20)
+            list_question[2] = random.randint(0,20-list_question[1])
+            list_question[3] = list_question[1]+list_question[2]
+        elif model_list.get()=='3':
+            list_question[1] = random.randint(0,20)
+            list_question[2] = random.randint(0,20-list_question[1])
+            list_question[3] = list_question[1]+list_question[2]
     elif list_question[0] == '-':
-        list_question[1] = random.randint(1,maxnum)
-        list_question[2] = random.randint(0,list_question[1])
-        list_question[3] = list_question[1]-list_question[2]
+        if model_list.get()=='1':
+            list_question[1] = random.randint(1,10)
+            list_question[2] = random.randint(0,list_question[1])
+            list_question[3] = list_question[1]-list_question[2]
+        elif model_list.get()=='2':
+            list_question[1] = random.randint(11,19)
+            list_question[2] = random.randint(1,list_question[1]-10)
+            list_question[3] = list_question[1]-list_question[2]
+        elif model_list.get()=='3':
+            list_question[1] = random.randint(1,20)
+            list_question[2] = random.randint(0,list_question[1])
+            list_question[3] = list_question[1]-list_question[2]
     n = random.choice([1,2,3])
     result = list_question[n]
     list_result[0] = result
     list_question[n] = '□'
     string = str(list_question[1])+str(list_question[0])+str(list_question[2])+'='+str(list_question[3])
     canvas.bind('<Button-1>',click)
+        
     canvas.create_text(590,200,text=string,font='ComicSansMS -270 bold',fill='blue',tags='text')
 
 def start():
-    get_question(10)
+    global time_start
+    global n
+    global number_error 
+    n = 1
+    number_error = 0
+    time_start = int(time.time())
+    get_question()
     init(20)
     button1.configure(text='下一题',command=nextquestion)
     R1.configure(state = 'disabled')
     R2.configure(state = 'disabled')
     R3.configure(state = 'disabled')
+    button2.configure(state = 'normal')
+    
 
 def nextquestion():
     global list_result
-    get_question(10)
+    global n
+    n += 1
+    get_question()
     
 def display():
+    global time_start
+    global time_end
+    global number_error
+    global n
+    time_end = int(time.time())
+    print (time_end-time_start)/3600,'时',((time_end-time_start)%3600)/60,'分',((time_end-time_start)%3600)%60,'秒'
+    print n,number_error 
     canvas.delete('text')
     canvas.delete('init')
     button1.configure(text='开始',command=start)
     R1.configure(state = 'normal')
     R2.configure(state = 'normal')
     R3.configure(state = 'normal')
+    button2.configure(state = 'disabled')
 
 def click(event):
+    global number_error
     x = event.x
     y = event.y
     for xy in list_number:
@@ -73,10 +116,12 @@ def click(event):
             canvas.unbind('<Button-1>')
             canvas.create_rectangle(xy.x1,xy.y1,xy.x2,xy.y2,fill='red',tags='text')
             if xy.number == list_result[0]:
-                canvas.create_text(700,400,text='正确',font='ComicSansMS -40 bold',fill='red',tags='text')
+                canvas.create_text(700,400,text='正确,你好棒哦！',font='ComicSansMS -40 bold',fill='red',tags='text')
             else:
-                canvas.create_text(700,400,text='错误，正确答案应为'+str(list_result[0]),font='ComicSansMS -40 bold',fill='red',tags='text')
-            print xy.number,list_result[0]
+                canvas.create_text(700,400,text='错误，正确答案应为 '+str(list_result[0]),font='ComicSansMS -40 bold',fill='red',tags='text')
+                number_error += 1
+                print number_error
+            ##print xy.number,list_result[0]
 
 def init(maxnum):
     num_width = 50
@@ -100,10 +145,10 @@ canvas = Canvas(frame,bg='green',width=1180,height=580)
 model_list = StringVar()
 model_list.set(1)
 button1 = Button(windows,height=3,width=15,font='ComicSansMS -20 bold',text='开始',command=start)
-button2 = Button(windows,height=3,width=15,font='ComicSansMS -20 bold',text='结束-显示成绩',command=display)
+button2 = Button(windows,state = 'disabled',height=3,width=15,font='ComicSansMS -20 bold',text='结束-显示成绩',command=display)
 R1 = Radiobutton(windows,width=12,indicatoron = False ,text="10以内加减", variable=model_list, value=1)  
 R2 = Radiobutton(windows,width=12,indicatoron = False ,text="20以内不进位", variable=model_list, value=2)  
-R3 = Radiobutton(windows,width=12,indicatoron = False ,text="20以内进位", variable=model_list, value=3)  
+R3 = Radiobutton(windows,width=12,indicatoron = False ,text="20以内含进位", variable=model_list, value=3)  
  
 frame.grid(row=0,column=0,columnspan=9,rowspan=6)
 canvas.grid(row=0,column=0,columnspan=9,rowspan=6)
@@ -112,8 +157,5 @@ R2.grid(row=7,column=2)
 R3.grid(row=8,column=2)
 button1.grid(row=6,column=4,rowspan=3)
 button2.grid(row=6,column=6,rowspan=3)
-
-
-
 
 windows.mainloop()
