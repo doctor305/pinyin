@@ -77,7 +77,7 @@ def start():
     number_error = 0
     time_start = int(time.time())
     get_question()
-    init(20)
+    init()
     button1.configure(text='下一题',command=nextquestion)
     R1.configure(state = 'disabled')
     R2.configure(state = 'disabled')
@@ -94,13 +94,12 @@ def nextquestion():
 def display():
     global time_start
     global time_end
-    global number_error
     global n
-    time_end = int(time.time())
-    print (time_end-time_start)/3600,'时',((time_end-time_start)%3600)/60,'分',((time_end-time_start)%3600)%60,'秒'
-    print n,number_error 
     canvas.delete('text')
     canvas.delete('init')
+    time_end = int(time.time())
+    canvas.create_text(1180/2,400,text='此次用时：%s 时 %s 分 %s 秒' % ((time_end-time_start)/3600,((time_end-time_start)%3600)/60,((time_end-time_start)%3600)%60),font='ComicSansMS -40 bold',fill='red',tags='text')
+    canvas.create_text(1180/2,500,text='共 %s  错误 %s' % (n,number_error) ,font='ComicSansMS -40 bold',fill='red',tags='text')
     button1.configure(text='开始',command=start)
     R1.configure(state = 'normal')
     R2.configure(state = 'normal')
@@ -121,17 +120,18 @@ def click(event):
                 canvas.create_text(700,400,text='错误，正确答案应为 '+str(list_result[0]),font='ComicSansMS -40 bold',fill='red',tags='text')
                 number_error += 1
                 print number_error
+            break
             ##print xy.number,list_result[0]
 
-def init(maxnum):
+def init():
+    maxnum = 20
     num_width = 50
     canvas.create_line(65,580-45-num_width,1180-65,580-45-num_width,fill='black',width=2,tags='init')
     canvas.create_line(65,580-45,1180-65,580-45,fill='black',width=2,tags='init')
-    for n in range(maxnum+1):
-        canvas.create_line(65+n*num_width,580-45-num_width,65+n*num_width,580-45,fill='black',width=2,tags='init')
-        canvas.create_text(65+(n+0.5)*num_width,580-45-num_width*0.5,text = n,font='ComicSansMS -40 bold',fill='black',tags='init')
-        list_number.append(ClickNumber(65+n*num_width,580-45-num_width,65+(n+1)*num_width,580-45,n))
-        
+    for a in range(maxnum+1):
+        canvas.create_line(65+a*num_width,580-45-num_width,65+a*num_width,580-45,fill='black',width=2,tags='init')
+        canvas.create_text(65+(a+0.5)*num_width,580-45-num_width*0.5,text = a,font='ComicSansMS -40 bold',fill='black',tags='init')
+        list_number.append(ClickNumber(65+a*num_width,580-45-num_width,65+(a+1)*num_width,580-45,a))
     canvas.create_line(65+(maxnum+1)*num_width,580-45-num_width,65+(maxnum+1)*num_width,580-45,fill='black',width=2,tags='init')
     
 
