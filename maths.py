@@ -60,10 +60,10 @@ def get_question():
             list_question[1] = random.randint(1,20)
             list_question[2] = random.randint(0,list_question[1])
             list_question[3] = list_question[1]-list_question[2]
-    n = random.choice([1,2,3])
-    result = list_question[n]
+    b = random.choice([1,2,3])
+    result = list_question[b]
     list_result[0] = result
-    list_question[n] = '□'
+    list_question[b] = '□'
     string = str(list_question[1])+str(list_question[0])+str(list_question[2])+'='+str(list_question[3])
     canvas.bind('<Button-1>',click)
         
