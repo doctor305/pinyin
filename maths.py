@@ -8,7 +8,6 @@ import os
 import random
 import time
 
-number = 0
 list_number = []
 list_question = ['','','','']
 list_result = [-1]
