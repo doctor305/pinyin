@@ -73,6 +73,16 @@ def get_question():
     canvas.create_text(590,250,text=string,font='ComicSansMS -270 bold',fill='blue',tags='text')
     tag_done = 0
 
+def mistake(w,r):
+    global number_error
+    global list_error
+    number_error += 1
+    question = str(list_question[1])+str(list_question[0])+str(list_question[2])+'='+str(list_question[3])
+    if w == -1:
+        list_error.append('[Q] %s\t[W] NULL\t[R] %d' % (question,r))
+    else:
+        list_error.append('[Q] %s\t[W] %d\t[R] %d' % (question,w,r))
+
 def start():
     global time_start
     global number_question
@@ -95,12 +105,9 @@ def start():
 def nextquestion():
     global number_question
     global tag_done
-    global number_error
-    global list_error
     number_question += 1
     if tag_done == 0:
-        number_error += 1
-        list_error.append(str(list_question[1])+str(list_question[0])+str(list_question[2])+'='+str(list_question[3]))
+        mistake(-1,list_result[0])
     get_question()
     
 def display():
@@ -108,17 +115,17 @@ def display():
     global time_end
     global number_question
     global number_error
-    global list_error
     global tag_done
     
     if tag_done == 0:
-        number_error += 1
-        list_error.append(str(list_question[1])+str(list_question[0])+str(list_question[2])+'='+str(list_question[3]))
+        mistake(-1,list_result[0])
     canvas.delete('text')
     canvas.delete('init')
     time_end = int(time.time())
-    canvas.create_text(1180/2,400,text='此次用时：%s 时 %s 分 %s 秒' % ((time_end-time_start)/3600,((time_end-time_start)%3600)/60,((time_end-time_start)%3600)%60),font='ComicSansMS -40 bold',fill='red',tags='text')
-    canvas.create_text(1180/2,500,text='共 %s  错误 %s' % (number_question,number_error) ,font='ComicSansMS -40 bold',fill='red',tags='text')
+    canvas.create_text(1180/2,300,text='此次测试用时：%d 时 %d 分 %d 秒' % ((time_end-time_start)/3600,((time_end-time_start)%3600)/60,((time_end-time_start)%3600)%60),font='ComicSansMS -40 bold',fill='red',tags='text')
+    canvas.create_text(1180/2,400,text='共做题 %d 道   错误 %d 道' % (number_question,number_error) ,font='ComicSansMS -40 bold',fill='red',tags='text')
+    filename = savefile()
+    canvas.create_text(800,500,text='错题集已整理保存到文件 %s 中' % filename ,font='ComicSansMS -20 bold',fill='black',tags='text')
     button1.configure(text='开始',command=start)
     R1.configure(state = 'normal')
     R2.configure(state = 'normal')
@@ -140,8 +147,7 @@ def click(event):
                 canvas.create_text(700,400,text='正确,你好棒哦！',font='ComicSansMS -40 bold',fill='red',tags='text')
             else:
                 canvas.create_text(700,400,text='错误，正确答案应为 '+str(list_result[0]),font='ComicSansMS -40 bold',fill='red',tags='text')
-                number_error += 1
-                list_error.append(str(list_question[1])+str(list_question[0])+str(list_question[2])+'='+str(list_question[3]))
+                mistake(xy.number,list_result[0])
                 #print number_error
             break
             ##print xy.number,list_result[0]
@@ -156,12 +162,18 @@ def init():
         canvas.create_text(65+(a+0.5)*num_width,580-45-num_width*0.5,text = a,font='ComicSansMS -40 bold',fill='black',tags='init')
         list_number.append(ClickNumber(65+a*num_width,580-45-num_width,65+(a+1)*num_width,580-45,a))
     canvas.create_line(65+(maxnum+1)*num_width,580-45-num_width,65+(maxnum+1)*num_width,580-45,fill='black',width=2,tags='init')
-    
 
+def savefile():
+    filename = 'Mistakes' + time.strftime("%Y-%m-%d_", time.localtime()) + str(random.randint(100000,999999)) + '.txt'
+    with open(filename,'w') as f:
+        for content in list_error:
+            f.write(content+'\n')
+    return filename
+        
 windows = Tk()
 windows.maxsize(1200,700)
 windows.minsize(1200,700)
-windows.title("一年级数学练习  Version 1.0.5 ")
+windows.title("一年级数学练习  Version 1.0.6 ")
 
 frame = Frame(windows,relief=GROOVE,borderwidth=10)
 canvas = Canvas(frame,bg='green',width=1180,height=580)
@@ -170,7 +182,7 @@ model_list.set(1)
 button1 = Button(windows,height=3,width=15,font='ComicSansMS -20 bold',text='开始',command=start)
 button2 = Button(windows,state = 'disabled',height=3,width=15,font='ComicSansMS -20 bold',text='结束-显示成绩',command=display)
 R1 = Radiobutton(windows,width=12,indicatoron = False ,text="10以内加减", variable=model_list, value=1)  
-R2 = Radiobutton(windows,width=12,indicatoron = False ,text="20以内不进位", variable=model_list, value=2)  
+R2 = Radiobutton(windows,width=12,indicatoron = False ,text="10以上不进位", variable=model_list, value=2)  
 R3 = Radiobutton(windows,width=12,indicatoron = False ,text="20以内含进位", variable=model_list, value=3)  
  
 frame.grid(row=0,column=0,columnspan=9,rowspan=6)
