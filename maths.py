@@ -18,7 +18,7 @@ time_end = 0
 number_question = 0
 number_error = 0
 tag_done = 0
-n = 0
+
 
 class ClickNumber():
     def __init__(self,x1,y1,x2,y2,number):
