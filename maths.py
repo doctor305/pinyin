@@ -16,7 +16,8 @@ time_start = 0
 time_end = 0
 number_question = 0
 number_error = 0
-tag_start = 0
+tag_done = 0
+n = 0
 
 class ClickNumber():
     def __init__(self,x1,y1,x2,y2,number):
@@ -63,11 +64,12 @@ def get_question():
     b = random.choice([1,2,3])
     result = list_question[b]
     list_result[0] = result
-    list_question[b] = '□'
+    list_question[b] = '?'
     string = str(list_question[1])+str(list_question[0])+str(list_question[2])+'='+str(list_question[3])
     canvas.bind('<Button-1>',click)
-        
-    canvas.create_text(590,200,text=string,font='ComicSansMS -270 bold',fill='blue',tags='text')
+    canvas.create_text(100,50,text='第%s题' % n,font='黑体 -40 bold',fill='red',tags='text')    
+    canvas.create_text(590,250,text=string,font='ComicSansMS -270 bold',fill='blue',tags='text')
+    tag_done = 0
 
 def start():
     global time_start
@@ -86,15 +88,22 @@ def start():
     
 
 def nextquestion():
-    global list_result
     global n
+    global tag_done
+    global number_error
     n += 1
+    if tag_done == 0:
+        number_error += 1
     get_question()
     
 def display():
     global time_start
     global time_end
     global n
+    global number_error
+    
+    if tag_done == 0:
+        number_error += 1
     canvas.delete('text')
     canvas.delete('init')
     time_end = int(time.time())
@@ -108,10 +117,12 @@ def display():
 
 def click(event):
     global number_error
+    global tag_done
     x = event.x
     y = event.y
     for xy in list_number:
         if x < xy.x2 and x > xy.x1 and y < xy.y2 and y > xy.y1:
+            tag_done = 1
             canvas.unbind('<Button-1>')
             canvas.create_rectangle(xy.x1,xy.y1,xy.x2,xy.y2,fill='red',tags='text')
             if xy.number == list_result[0]:
@@ -119,7 +130,7 @@ def click(event):
             else:
                 canvas.create_text(700,400,text='错误，正确答案应为 '+str(list_result[0]),font='ComicSansMS -40 bold',fill='red',tags='text')
                 number_error += 1
-                print number_error
+                #print number_error
             break
             ##print xy.number,list_result[0]
 
@@ -138,7 +149,7 @@ def init():
 windows = Tk()
 windows.maxsize(1200,700)
 windows.minsize(1200,700)
-windows.title("一年级数学练习  Version 1.0.3 ")
+windows.title("一年级数学练习  Version 1.0.5 ")
 
 frame = Frame(windows,relief=GROOVE,borderwidth=10)
 canvas = Canvas(frame,bg='green',width=1180,height=580)
