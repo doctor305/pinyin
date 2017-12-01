@@ -123,8 +123,9 @@ def display():
     time_end = int(time.time())
     canvas.create_text(1180/2,300,text='此次测试用时：%d 时 %d 分 %d 秒' % ((time_end-time_start)/3600,((time_end-time_start)%3600)/60,((time_end-time_start)%3600)%60),font='ComicSansMS -40 bold',fill='red',tags='text')
     canvas.create_text(1180/2,400,text='共做题 %d 道   错误 %d 道' % (number_question,number_error) ,font='ComicSansMS -40 bold',fill='red',tags='text')
-    filename = savefile()
-    canvas.create_text(800,500,text='错题集已整理保存到文件 %s 中' % filename ,font='ComicSansMS -20 bold',fill='black',tags='text')
+    if number_error <> 0:
+        filename = savefile()
+        canvas.create_text(800,500,text='错题集已整理保存到文件 %s 中' % filename ,font='ComicSansMS -20 bold',fill='black',tags='text')
     button1.configure(text='开始',command=start)
     R1.configure(state = 'normal')
     R2.configure(state = 'normal')
